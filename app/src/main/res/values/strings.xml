@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">StudentMgr</string>
+    <string name="title">Student Management</string>
+    <string name="abs">Wellcome to this application</string>
+    <string name="id">学号</string>
+    <string name="name">姓名</string>
+    <string name="sex">请选择你的性别</string>
+    <string name="college">请选择你的学院</string>
+    <string-array name="collegeArray">
+        <item>计算机学院</item>
+        <item>汽车学院</item>
+        <item>电气学院</item>
+    </string-array>
+</resources>
