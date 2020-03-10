@@ -6,6 +6,7 @@
     <string name="name">姓名</string>
     <string name="sex">请选择你的性别</string>
     <string name="college">请选择你的学院</string>
+    <string name="loginTitle">学生管理系统登录界面</string>
     <string-array name="collegeArray">
         <item>计算机学院</item>
         <item>汽车学院</item>

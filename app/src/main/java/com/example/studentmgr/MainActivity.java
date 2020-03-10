@@ -2,11 +2,19 @@ package com.example.studentmgr;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.ContextMenu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
+import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.studentmgr.adpater.StudentAdapter;
 import com.example.studentmgr.dao.StudentDao;
@@ -18,7 +26,7 @@ import java.util.Collection;
 import java.util.Collections;
 
 public class MainActivity extends AppCompatActivity {
-
+    private ListView listView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,10 +43,42 @@ public class MainActivity extends AppCompatActivity {
         StudentDao studentDao = new StudentDaoImpl(this);
         ArrayList<Student> studentArrayList = studentDao.selectAll();
         //获取数据库中学生信息，进行渲染
-        ListView listView = (ListView) findViewById(R.id.listView);
+        listView = (ListView) findViewById(R.id.listView);
+        this.registerForContextMenu(listView);
         Collections.reverse(studentArrayList);
-        //TODO check3：通过Adapter设置listView数据与样式
         listView.setAdapter(new StudentAdapter(this, studentArrayList));
+    }
+
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+        //根据View生成对应的菜单
+        if (v == listView) {
+            //添加菜单项
+            menu.add(0, 0, 0, "编辑");
+            menu.add(0, 1, 0, "删除");
+        }
+    }
+
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        //关键代码
+        AdapterView.AdapterContextMenuInfo menuInfo = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+        TextView textView = menuInfo.targetView.findViewById(R.id.textView2);
+        switch (item.getItemId()) {
+            //跳转到编辑界面
+            case 0:
+                //输出当前点击的item的学号
+                updateItem(textView.getText().toString());
+                break;
+            //删除该学生信息
+            case 1:
+                deleteItem(textView.getText().toString(), this);
+                break;
+            default:
+                break;
+        }
+        return super.onContextItemSelected(item);
     }
 
     /**
@@ -52,4 +92,43 @@ public class MainActivity extends AppCompatActivity {
         //想Android系统发出链接请求，并跳转界面
         startActivity(intent);
     }
+
+    public void updateItem(String id) {
+        Toast.makeText(this, "学号：" + id, Toast.LENGTH_SHORT).show();
+        //创建intent,并附加消息
+        Intent intent = new Intent(this, StudentActivity.class);
+        intent.putExtra("id", id);
+        //想Android系统发出链接请求，并跳转界面
+        startActivity(intent);
+
+    }
+
+    public void deleteItem(final String id, final Context context) {
+        final AlertDialog.Builder normalDialog = new AlertDialog.Builder(MainActivity.this);
+        normalDialog.setMessage("确定要删除么?");
+        normalDialog.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                //...To-do
+                StudentDao studentDao = new StudentDaoImpl(context);
+                studentDao.deleteStudentById(id);
+                Toast.makeText(context, "删除成功", Toast.LENGTH_SHORT).show();
+                Intent intent2 = new Intent(context, MainActivity.class);
+                //想Android系统发出链接请求，并跳转界面
+                startActivity(intent2);
+            }
+        });
+        normalDialog.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                //...To-do
+            }
+        });
+        // 显示
+        normalDialog.show();
+
+
+    }
+
+
 }

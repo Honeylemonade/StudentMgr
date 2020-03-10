@@ -9,7 +9,6 @@ import android.util.Log;
 import androidx.annotation.Nullable;
 
 public class DataBaseHelper extends SQLiteOpenHelper {
-    //TODO check1： 数据库连接配置
     //设置数据库名称和版本号
     static final String DATABASE_NAME = "studentmgr.db";
     static final int VERSION_CODE = 1;

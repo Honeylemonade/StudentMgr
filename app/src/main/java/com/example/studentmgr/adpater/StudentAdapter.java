@@ -53,7 +53,6 @@ public class StudentAdapter extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
         ViewHolder viewHolder = null;
         if (convertView == null) {
-            //TODO check4：通过layoutInflater设置layout
             convertView = layoutInflater.inflate(R.layout.listview_item, null);
             viewHolder = new ViewHolder();
             viewHolder.imageView = (ImageView) convertView.findViewById(R.id.imageView);
