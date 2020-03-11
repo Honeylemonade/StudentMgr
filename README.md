@@ -8,8 +8,6 @@
 
 ### LoginActivity
 
-
-
 1. postDelayed（）延迟执行任务
 2. InheritableThreadLocal<Object> 实现不同线程之间的通信
 
