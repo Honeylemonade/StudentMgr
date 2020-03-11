@@ -66,7 +66,6 @@ public class StudentActivity extends AppCompatActivity {
             radioGroup.check(radioButton2.getId());
         }
         SpinnerSelecter.collegeSelect(spinner, student.getCollege());
-        //TODO 二级spinner设置存在问题。may 车辆工程
         final InheritableThreadLocal<String> inheritableThreadLocal = new InheritableThreadLocal<>();
         inheritableThreadLocal.set(student.getProfession());
         new Handler().postDelayed(new Runnable() {

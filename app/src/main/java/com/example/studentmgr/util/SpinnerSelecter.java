@@ -2,6 +2,9 @@ package com.example.studentmgr.util;
 
 import android.widget.Spinner;
 
+/**
+ * 根据给定字符串设定spinner当前状态
+ */
 public class SpinnerSelecter {
     public static boolean collegeSelect(Spinner spinner, String str) {
         switch (str) {
