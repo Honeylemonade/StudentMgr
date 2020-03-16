@@ -53,6 +53,7 @@ public class StudentAdapter extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
         ViewHolder viewHolder = null;
         if (convertView == null) {
+            //引入外部布局文件
             convertView = layoutInflater.inflate(R.layout.listview_item, null);
             viewHolder = new ViewHolder();
             viewHolder.imageView = (ImageView) convertView.findViewById(R.id.imageView);
@@ -82,7 +83,7 @@ public class StudentAdapter extends BaseAdapter {
         }
         viewHolder.textView5.setText(sex);
         viewHolder.textView8.setText(student.getCollege());
-        viewHolder.textView16.setText("NO."+String.valueOf(position+1));
+        viewHolder.textView16.setText("NO." + String.valueOf(position + 1));
 
         return convertView;
     }
