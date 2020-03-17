@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">学生管理系统</string>
+    <string name="app_name">STUDENTMGR</string>
     <string name="title">Student Management</string>
     <string name="abs">Wellcome to this application</string>
     <string name="id">学号</string>
@@ -7,8 +7,9 @@
     <string name="sex">请选择你的性别</string>
     <string name="college">请选择你的学院</string>
     <string name="loginTitle">学生管理系统登录界面</string>
-    <string name="action_favorite">喜欢</string>
-    <string name="action_settings">设置</string>
+    <string name="action_flash">刷新</string>
+    <string name="action_insert">添加</string>
+    <string name="action_find">查找</string>
     <string-array name="collegeArray">
         <item>计算机学院</item>
         <item>汽车学院</item>

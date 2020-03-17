@@ -17,10 +17,12 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="?attr/colorPrimary"
+            android:background="@color/colorPrimary"
             android:minHeight="?attr/actionBarSize"
             android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
-            app:popupTheme="@style/ThemeOverlay.AppCompat.Light"/>
+            app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+            app:subtitleTextColor="#EFEFEF"
+            app:titleTextColor="#F3F3F3" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -36,19 +38,5 @@
         </LinearLayout>
 
     </LinearLayout>
-
-    <Button
-        android:id="@+id/jumpBTN"
-        android:layout_width="47dp"
-        android:layout_height="115dp"
-        android:layout_marginStart="370dp"
-        android:layout_marginTop="432dp"
-        android:gravity="left|center_vertical"
-        android:onClick="jumpBTNonclick"
-        android:text="添加学生"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

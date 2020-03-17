@@ -1,6 +1,7 @@
 package com.example.studentmgr;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.DialogFragment;
 
 import android.content.Context;
 import android.content.Intent;
@@ -12,6 +13,8 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
@@ -22,6 +25,7 @@ import com.example.studentmgr.dao.StudentDaoImpl;
 import com.example.studentmgr.entity.Admin;
 import com.example.studentmgr.entity.Student;
 import com.example.studentmgr.listener.CollegeSpinnerListener;
+import com.example.studentmgr.util.DatePickerFragment;
 import com.example.studentmgr.util.SpinnerSelecter;
 
 import java.util.ArrayList;
@@ -29,6 +33,7 @@ import java.util.ArrayList;
 public class StudentActivity extends AppCompatActivity {
     EditText editText;
     EditText editText2;
+    EditText editText6;
     RadioGroup radioGroup;
     RadioButton radioButton;
     RadioButton radioButton2;
@@ -38,6 +43,7 @@ public class StudentActivity extends AppCompatActivity {
     CheckBox checkBox2;
     CheckBox checkBox3;
     CheckBox checkBox4;
+    public static StudentActivity instance;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,6 +66,7 @@ public class StudentActivity extends AppCompatActivity {
         Student student = studentDao.selectStudentById(id);
         editText.setText(student.getName());
         editText2.setText(student.getId());
+        editText6.setText(student.getBirthday());
         if (student.getSex() == 0) {
             radioGroup.check(radioButton.getId());
         } else {
@@ -100,6 +107,9 @@ public class StudentActivity extends AppCompatActivity {
     public void init() {
         editText = findViewById(R.id.editText);
         editText2 = findViewById(R.id.editText2);
+        editText6 = findViewById(R.id.editText6);
+        editText6.setFocusable(false);
+        editText6.setFocusableInTouchMode(false);
         radioGroup = findViewById(R.id.radioGroup);
         radioButton = findViewById(R.id.radioButton);
         radioButton2 = findViewById(R.id.radioButton2);
@@ -109,6 +119,7 @@ public class StudentActivity extends AppCompatActivity {
         checkBox2 = findViewById(R.id.checkBox2);
         checkBox3 = findViewById(R.id.checkBox3);
         checkBox4 = findViewById(R.id.checkBox4);
+        instance = this;
 
     }
 
@@ -136,7 +147,8 @@ public class StudentActivity extends AppCompatActivity {
         checkBoxArrayList.add(checkBox3);
         checkBoxArrayList.add(checkBox4);
         String hobbies = getCheckBoxResult(checkBoxArrayList);
-        Student student = new Student(id, name, sex, college, profession, hobbies);
+        String birthday=editText6.getText().toString();
+        Student student = new Student(id, name, sex, college, profession, hobbies,birthday);
         System.out.println(student);
         StudentDao studentDao = new StudentDaoImpl(this);
         //如果是从修改item跳转过来的，则进行更新操作，否则进行插入操作
@@ -144,7 +156,13 @@ public class StudentActivity extends AppCompatActivity {
         String intentFlag = preIntent.getStringExtra("id");
         if (intentFlag != null) {
             studentDao.updateStudent(student);
-            Toast toast = Toast.makeText(this, "更新成功", Toast.LENGTH_SHORT);
+            //定制化toast
+            Toast toast = Toast.makeText(this, "修改成功 ", Toast.LENGTH_SHORT);
+            LinearLayout toastView= (LinearLayout) toast.getView();
+            toastView.setOrientation(LinearLayout.HORIZONTAL);
+            ImageView toastImage = new ImageView(getApplicationContext());
+            toastImage.setImageResource(R.drawable.duigou);
+            toastView.addView(toastImage);
             toast.show();
             //创建intent,并附加消息
             Intent intent = new Intent(this, MainActivity.class);
@@ -152,7 +170,13 @@ public class StudentActivity extends AppCompatActivity {
             startActivity(intent);
         } else {
             studentDao.insertStudent(student);
-            Toast toast = Toast.makeText(this, "插入成功", Toast.LENGTH_SHORT);
+            //定制化toast
+            Toast toast = Toast.makeText(this, "添加成功 ", Toast.LENGTH_SHORT);
+            LinearLayout toastView= (LinearLayout) toast.getView();
+            toastView.setOrientation(LinearLayout.HORIZONTAL);
+            ImageView toastImage = new ImageView(getApplicationContext());
+            toastImage.setImageResource(R.drawable.duigou);
+            toastView.addView(toastImage);
             toast.show();
             //创建intent,并附加消息
             Intent intent = new Intent(this, MainActivity.class);
@@ -176,5 +200,13 @@ public class StudentActivity extends AppCompatActivity {
             }
         }
         return result.toString();
+    }
+
+    /**
+     * 点击出现datepicker
+     */
+    public void showDatePicker(View view) {
+        DialogFragment newFragment = new DatePickerFragment();
+        newFragment.show(getSupportFragmentManager(), "datePicker");
     }
 }

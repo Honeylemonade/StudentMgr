@@ -24,10 +24,10 @@ public class StudentDaoImpl implements StudentDao {
             ArrayList result = new ArrayList<Student>();
             //读取数据库,获取游标
             System.out.println("//////////////////////////////////正在查询//////////////////////////////////");
-            Cursor cursor = db.query("student", new String[]{"id", "name", "sex", "college", "profession", "hobbies"}, null, null, null, null, null);
+            Cursor cursor = db.query("student", new String[]{"id", "name", "sex", "college", "profession", "hobbies","birthday"}, null, null, null, null, null);
             while (cursor.moveToNext()) {
                 System.out.println(cursor.getString(0));
-                result.add(new Student(cursor.getString(0), cursor.getString(1), cursor.getInt(2), cursor.getString(3), cursor.getString(4), cursor.getString(5)));
+                result.add(new Student(cursor.getString(0), cursor.getString(1), cursor.getInt(2), cursor.getString(3), cursor.getString(4), cursor.getString(5),cursor.getString(6)));
             }
             return result;
         } catch (Exception e) {
@@ -46,6 +46,7 @@ public class StudentDaoImpl implements StudentDao {
             contentValues.put("college", student.getCollege());
             contentValues.put("profession", student.getProfession());
             contentValues.put("hobbies", student.getHobbies());
+            contentValues.put("birthday", student.getBirthday());
             db.insert("student", null, contentValues);
         } catch (Exception e) {
             System.out.println("//////////////////////////////////插入错误//////////////////////////////////");
@@ -57,10 +58,10 @@ public class StudentDaoImpl implements StudentDao {
     public Student selectStudentById(String id) {
         try (SQLiteDatabase db = dataBaseHelper.getReadableDatabase()) {
             //Cursor cursor = db.query("student", null, id + "=?", new String[]{id}, null, null, null);
-            Cursor cursor = db.query("student", new String[]{"id", "name", "sex", "college", "profession", "hobbies"}, "id = ?", new String[]{id}, null, null, null);
+            Cursor cursor = db.query("student", new String[]{"id", "name", "sex", "college", "profession", "hobbies","birthday"}, "id = ?", new String[]{id}, null, null, null);
             Student student = null;
             while (cursor.moveToNext()) {
-                student = new Student(cursor.getString(0), cursor.getString(1), cursor.getInt(2), cursor.getString(3), cursor.getString(4), cursor.getString(5));
+                student = new Student(cursor.getString(0), cursor.getString(1), cursor.getInt(2), cursor.getString(3), cursor.getString(4), cursor.getString(5),cursor.getString(6));
                 System.out.println(student);
             }
             return student;
@@ -80,6 +81,7 @@ public class StudentDaoImpl implements StudentDao {
             contentValues.put("college", student.getCollege());
             contentValues.put("profession", student.getProfession());
             contentValues.put("hobbies", student.getHobbies());
+            contentValues.put("birthday", student.getBirthday());
             db.update("student", contentValues, "id=?", new String[]{student.getId()});
         } catch (Exception e) {
             System.out.println("//////////////////////////////////插入错误//////////////////////////////////");

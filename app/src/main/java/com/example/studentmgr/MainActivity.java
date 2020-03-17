@@ -13,9 +13,11 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.Window;
 import android.widget.AdapterView;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -25,16 +27,18 @@ import com.example.studentmgr.dao.StudentDaoImpl;
 import com.example.studentmgr.entity.Student;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 
 public class MainActivity extends AppCompatActivity {
     private ListView listView;
+    public static Context instance;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        instance = this;
         //初始化数据
         init();
         //初始化应用栏
@@ -53,35 +57,44 @@ public class MainActivity extends AppCompatActivity {
         this.registerForContextMenu(listView);
         Collections.reverse(studentArrayList);
         listView.setAdapter(new StudentAdapter(this, studentArrayList));
+        listView.setTextFilterEnabled(true);
 
     }
 
+    //工具栏菜单
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater menuInflater=new MenuInflater(this);
-        menuInflater.inflate(R.);
+        MenuInflater menuInflater = new MenuInflater(this);
+        menuInflater.inflate(R.menu.menu, menu);
+        menu.findItem(R.id.action_find).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
         return super.onCreateOptionsMenu(menu);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.action_settings:
-                // User chose the "Settings" item, show the app settings UI...
+            //显示搜索界面
+            case R.id.action_find:
+
                 return true;
 
-            case R.id.action_favorite:
-                // User chose the "Favorite" action, mark the current item
-                // as a favorite...
+            case R.id.action_insert:
+                //创建intent,并附加消息
+                Intent intent = new Intent(this, StudentActivity.class);
+                //想Android系统发出链接请求，并跳转界面
+                startActivity(intent);
+                return true;
+
+            case R.id.action_flash:
+                Toast.makeText(this, "刷新成功", Toast.LENGTH_SHORT).show();
                 return true;
 
             default:
-                // If we got here, the user's action was not recognized.
-                // Invoke the superclass to handle it.
                 return super.onOptionsItemSelected(item);
-
         }
     }
+
+    //listview上下文菜单
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
         super.onCreateContextMenu(menu, v, menuInfo);
@@ -114,17 +127,6 @@ public class MainActivity extends AppCompatActivity {
         return super.onContextItemSelected(item);
     }
 
-    /**
-     * 点击了主界面的添加学生按钮，触发事件，跳转界面
-     *
-     * @param view
-     */
-    public void jumpBTNonclick(View view) {
-        //创建intent,并附加消息
-        Intent intent = new Intent(this, StudentActivity.class);
-        //想Android系统发出链接请求，并跳转界面
-        startActivity(intent);
-    }
 
     public void updateItem(String id) {
         Toast.makeText(this, "学号：" + id, Toast.LENGTH_SHORT).show();
@@ -145,7 +147,14 @@ public class MainActivity extends AppCompatActivity {
                 //...To-do
                 StudentDao studentDao = new StudentDaoImpl(context);
                 studentDao.deleteStudentById(id);
-                Toast.makeText(context, "删除成功", Toast.LENGTH_SHORT).show();
+                //定制化toast
+                Toast toast = Toast.makeText(MainActivity.this, "删除成功 ", Toast.LENGTH_SHORT);
+                LinearLayout toastView = (LinearLayout) toast.getView();
+                toastView.setOrientation(LinearLayout.HORIZONTAL);
+                ImageView toastImage = new ImageView(getApplicationContext());
+                toastImage.setImageResource(R.drawable.duigou);
+                toastView.addView(toastImage);
+                toast.show();
                 Intent intent2 = new Intent(context, MainActivity.class);
                 //想Android系统发出链接请求，并跳转界面
                 startActivity(intent2);
@@ -160,4 +169,6 @@ public class MainActivity extends AppCompatActivity {
         // 显示
         normalDialog.show();
     }
+
+
 }

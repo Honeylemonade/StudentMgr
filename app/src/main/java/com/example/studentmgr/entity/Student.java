@@ -7,6 +7,7 @@ public class Student {
     private String college;
     private String profession;
     private String hobbies;
+    private String birthday;
 
     @Override
     public String toString() {
@@ -17,6 +18,7 @@ public class Student {
                 ", college='" + college + '\'' +
                 ", profession='" + profession + '\'' +
                 ", hobbies='" + hobbies + '\'' +
+                ", birthday='" + birthday + '\'' +
                 '}';
     }
 
@@ -68,15 +70,24 @@ public class Student {
         this.hobbies = hobbies;
     }
 
+    public String getBirthday() {
+        return birthday;
+    }
+
+    public void setBirthday(String birthday) {
+        this.birthday = birthday;
+    }
+
     public Student() {
     }
 
-    public Student(String id, String name, Integer sex, String college, String profession, String hobbies) {
+    public Student(String id, String name, Integer sex, String college, String profession, String hobbies, String birthday) {
         this.id = id;
         this.name = name;
         this.sex = sex;
         this.college = college;
         this.profession = profession;
         this.hobbies = hobbies;
+        this.birthday = birthday;
     }
 }

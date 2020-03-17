@@ -5,6 +5,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -13,7 +15,7 @@ import com.example.studentmgr.entity.Student;
 
 import java.util.ArrayList;
 
-public class StudentAdapter extends BaseAdapter {
+public class StudentAdapter extends BaseAdapter implements Filterable {
     private Context context;
     private ArrayList<Student> arrayList;
     private LayoutInflater layoutInflater;
@@ -41,6 +43,11 @@ public class StudentAdapter extends BaseAdapter {
     @Override
     public long getItemId(int position) {
         return position;
+    }
+
+    @Override
+    public Filter getFilter() {
+        return null;
     }
 
     static class ViewHolder {
