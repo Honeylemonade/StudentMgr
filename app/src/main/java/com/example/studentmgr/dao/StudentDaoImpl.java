@@ -24,14 +24,32 @@ public class StudentDaoImpl implements StudentDao {
             ArrayList result = new ArrayList<Student>();
             //读取数据库,获取游标
             System.out.println("//////////////////////////////////正在查询//////////////////////////////////");
-            Cursor cursor = db.query("student", new String[]{"id", "name", "sex", "college", "profession", "hobbies","birthday"}, null, null, null, null, null);
+            Cursor cursor = db.query("student", new String[]{"id", "name", "sex", "college", "profession", "hobbies", "birthday"}, null, null, null, null, null);
             while (cursor.moveToNext()) {
                 System.out.println(cursor.getString(0));
-                result.add(new Student(cursor.getString(0), cursor.getString(1), cursor.getInt(2), cursor.getString(3), cursor.getString(4), cursor.getString(5),cursor.getString(6)));
+                result.add(new Student(cursor.getString(0), cursor.getString(1), cursor.getInt(2), cursor.getString(3), cursor.getString(4), cursor.getString(5), cursor.getString(6)));
             }
             return result;
         } catch (Exception e) {
             System.out.println("//////////////////////////////////查询错误//////////////////////////////////");
+        }
+        return null;
+    }
+
+    @Override
+    public ArrayList<Student> selectStudentByMultyConditions(String name, String college, String profession) {
+        try (SQLiteDatabase db = dataBaseHelper.getReadableDatabase()) {
+            //Cursor cursor = db.query("student", null, id + "=?", new String[]{id}, null, null, null);
+            Cursor cursor = db.query("student", new String[]{"id", "name", "sex", "college", "profession", "hobbies", "birthday"}, "name = ? and college = ? and profession = ?", new String[]{name, college, profession}, null, null, null);
+            ArrayList<Student> studentArrayList = new ArrayList<>();
+            Student student;
+            while (cursor.moveToNext()) {
+                student = new Student(cursor.getString(0), cursor.getString(1), cursor.getInt(2), cursor.getString(3), cursor.getString(4), cursor.getString(5), cursor.getString(6));
+                studentArrayList.add(student);
+            }
+            return studentArrayList;
+        } catch (Exception e) {
+            System.out.println("//////////////////////////////////" + e + "//////////////////////////////////");
         }
         return null;
     }
@@ -58,10 +76,10 @@ public class StudentDaoImpl implements StudentDao {
     public Student selectStudentById(String id) {
         try (SQLiteDatabase db = dataBaseHelper.getReadableDatabase()) {
             //Cursor cursor = db.query("student", null, id + "=?", new String[]{id}, null, null, null);
-            Cursor cursor = db.query("student", new String[]{"id", "name", "sex", "college", "profession", "hobbies","birthday"}, "id = ?", new String[]{id}, null, null, null);
+            Cursor cursor = db.query("student", new String[]{"id", "name", "sex", "college", "profession", "hobbies", "birthday"}, "id = ?", new String[]{id}, null, null, null);
             Student student = null;
             while (cursor.moveToNext()) {
-                student = new Student(cursor.getString(0), cursor.getString(1), cursor.getInt(2), cursor.getString(3), cursor.getString(4), cursor.getString(5),cursor.getString(6));
+                student = new Student(cursor.getString(0), cursor.getString(1), cursor.getInt(2), cursor.getString(3), cursor.getString(4), cursor.getString(5), cursor.getString(6));
                 System.out.println(student);
             }
             return student;

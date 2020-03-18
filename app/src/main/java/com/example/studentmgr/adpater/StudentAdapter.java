@@ -15,7 +15,7 @@ import com.example.studentmgr.entity.Student;
 
 import java.util.ArrayList;
 
-public class StudentAdapter extends BaseAdapter implements Filterable {
+public class StudentAdapter extends BaseAdapter{
     private Context context;
     private ArrayList<Student> arrayList;
     private LayoutInflater layoutInflater;
@@ -45,10 +45,6 @@ public class StudentAdapter extends BaseAdapter implements Filterable {
         return position;
     }
 
-    @Override
-    public Filter getFilter() {
-        return null;
-    }
 
     static class ViewHolder {
         public ImageView imageView;

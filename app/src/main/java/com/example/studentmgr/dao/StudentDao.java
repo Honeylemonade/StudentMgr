@@ -13,6 +13,8 @@ public interface StudentDao {
      */
     public ArrayList<Student> selectAll();
 
+    public ArrayList<Student> selectStudentByMultyConditions(String name, String college, String profession);
+
     /**
      * 插入学生信息
      *

@@ -9,15 +9,18 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.ContextMenu;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.SearchView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -25,6 +28,7 @@ import com.example.studentmgr.adpater.StudentAdapter;
 import com.example.studentmgr.dao.StudentDao;
 import com.example.studentmgr.dao.StudentDaoImpl;
 import com.example.studentmgr.entity.Student;
+import com.example.studentmgr.listener.CollegeSpinnerListener;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -32,6 +36,10 @@ import java.util.Collections;
 public class MainActivity extends AppCompatActivity {
     private ListView listView;
     public static Context instance;
+    //查询dialog中的控件
+    EditText editText5;
+    Spinner spinner3;
+    Spinner spinner4;
 
 
     @Override
@@ -57,7 +65,6 @@ public class MainActivity extends AppCompatActivity {
         this.registerForContextMenu(listView);
         Collections.reverse(studentArrayList);
         listView.setAdapter(new StudentAdapter(this, studentArrayList));
-        listView.setTextFilterEnabled(true);
 
     }
 
@@ -73,9 +80,9 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            //显示搜索界面
+            //显示搜索窗口
             case R.id.action_find:
-
+                showSearchDialog();
                 return true;
 
             case R.id.action_insert:
@@ -86,12 +93,52 @@ public class MainActivity extends AppCompatActivity {
                 return true;
 
             case R.id.action_flash:
+                StudentDao studentDao = new StudentDaoImpl(MainActivity.instance);
+                ArrayList<Student> studentArrayList = studentDao.selectAll();
+                listView.setAdapter(new StudentAdapter(MainActivity.instance, studentArrayList));
                 Toast.makeText(this, "刷新成功", Toast.LENGTH_SHORT).show();
                 return true;
 
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    //显示搜索窗口
+    private void showSearchDialog() {
+        final AlertDialog.Builder normalDialog = new AlertDialog.Builder(MainActivity.this);
+        normalDialog.setTitle("条件查询");
+        LayoutInflater layoutInflater = getLayoutInflater();
+        View childView = layoutInflater.inflate(R.layout.searchview_main, null);
+        normalDialog.setView(childView);
+        editText5 = childView.findViewById(R.id.editText5);
+        spinner3 = childView.findViewById(R.id.spinner3);
+        spinner4 = childView.findViewById(R.id.spinner4);
+        spinner3.setOnItemSelectedListener(new CollegeSpinnerListener(spinner4, this));
+        normalDialog.setPositiveButton("查询", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                String name = editText5.getText().toString();
+                String college = spinner3.getSelectedItem().toString();
+                String profession = spinner4.getSelectedItem().toString();
+                //刷新listview
+                StudentDao studentDao = new StudentDaoImpl(MainActivity.instance);
+                ArrayList<Student> studentArrayList = studentDao.selectStudentByMultyConditions(name, college, profession);
+                listView.setAdapter(new StudentAdapter(MainActivity.instance, studentArrayList));
+                if (studentArrayList.size()==0){
+                    Toast.makeText(MainActivity.instance, "结果为空", Toast.LENGTH_SHORT).show();
+                }
+
+            }
+        });
+        normalDialog.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                //...To-do
+            }
+        });
+        // 显示
+        normalDialog.show();
     }
 
     //listview上下文菜单
