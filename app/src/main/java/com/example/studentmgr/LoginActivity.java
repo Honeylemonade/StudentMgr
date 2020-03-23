@@ -1,24 +1,18 @@
 package com.example.studentmgr;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.Message;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ProgressBar;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.studentmgr.dao.AdminDao;
-import com.example.studentmgr.dao.AdminDaoImpl;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.example.studentmgr.entity.Admin;
 import com.example.studentmgr.util.AdminChecker;
-
-import java.util.ArrayList;
 
 public class LoginActivity extends AppCompatActivity {
     private ProgressBar progressBar;
@@ -75,5 +69,12 @@ public class LoginActivity extends AppCompatActivity {
         ProgressBar progressBar = findViewById(R.id.progressBar);
         progressBar.setVisibility(View.VISIBLE);
 
+    }
+
+    public void jumpToAds(View view) {
+        //创建intent,并附加消息
+        Intent intent = new Intent(this, AdsActivity.class);
+        //想Android系统发出链接请求，并跳转界面
+        startActivity(intent);
     }
 }

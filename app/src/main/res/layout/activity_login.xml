@@ -7,8 +7,8 @@
     tools:context=".LoginActivity">
 
     <LinearLayout
-        android:layout_width="409dp"
-        android:layout_height="729dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:orientation="vertical"
         android:padding="30sp"
         tools:layout_editor_absoluteX="1dp"
@@ -92,5 +92,12 @@
             android:onClick="loginBTNOnClick"
             android:text="登入"
             android:textStyle="bold" />
+
+        <Button
+            android:id="@+id/button3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="jumpToAds"
+            android:text="Button" />
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
