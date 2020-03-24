@@ -3,13 +3,16 @@ package com.example.studentmgr;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.DialogFragment;
 
-import android.content.Context;
+import android.app.ActivityOptions;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
+import android.transition.Fade;
+import android.transition.Slide;
+import android.view.GestureDetector;
+import android.view.Gravity;
+import android.view.MotionEvent;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -22,9 +25,9 @@ import android.widget.Toast;
 
 import com.example.studentmgr.dao.StudentDao;
 import com.example.studentmgr.dao.StudentDaoImpl;
-import com.example.studentmgr.entity.Admin;
 import com.example.studentmgr.entity.Student;
 import com.example.studentmgr.listener.CollegeSpinnerListener;
+import com.example.studentmgr.listener.StudentGestureListener;
 import com.example.studentmgr.util.DatePickerFragment;
 import com.example.studentmgr.util.SpinnerSelecter;
 
@@ -44,10 +47,18 @@ public class StudentActivity extends AppCompatActivity {
     CheckBox checkBox3;
     CheckBox checkBox4;
     public static StudentActivity instance;
+    //定义手势监听器
+    GestureDetector gestureDetector;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //第一次进入时使用
+        getWindow().setEnterTransition(new Slide(Gravity.RIGHT));
+        //再次进入时使用
+        getWindow().setReenterTransition(new Slide(Gravity.RIGHT));
+        //退出时使用
+        getWindow().setExitTransition(new Fade(Fade.OUT));
         setContentView(R.layout.activity_student);
         //注册spinner事件
         Spinner spinner = findViewById(R.id.spinner);
@@ -59,6 +70,13 @@ public class StudentActivity extends AppCompatActivity {
         if (id != null) {
             updateInit(id);
         }
+        //手势监听器
+        gestureDetector = new GestureDetector(this, new StudentGestureListener());
+    }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        return gestureDetector.onTouchEvent(event);
     }
 
     public void updateInit(String id) {
@@ -147,8 +165,8 @@ public class StudentActivity extends AppCompatActivity {
         checkBoxArrayList.add(checkBox3);
         checkBoxArrayList.add(checkBox4);
         String hobbies = getCheckBoxResult(checkBoxArrayList);
-        String birthday=editText6.getText().toString();
-        Student student = new Student(id, name, sex, college, profession, hobbies,birthday);
+        String birthday = editText6.getText().toString();
+        Student student = new Student(id, name, sex, college, profession, hobbies, birthday);
         System.out.println(student);
         StudentDao studentDao = new StudentDaoImpl(this);
         //如果是从修改item跳转过来的，则进行更新操作，否则进行插入操作
@@ -158,30 +176,24 @@ public class StudentActivity extends AppCompatActivity {
             studentDao.updateStudent(student);
             //定制化toast
             Toast toast = Toast.makeText(this, "修改成功 ", Toast.LENGTH_SHORT);
-            LinearLayout toastView= (LinearLayout) toast.getView();
+            LinearLayout toastView = (LinearLayout) toast.getView();
             toastView.setOrientation(LinearLayout.HORIZONTAL);
             ImageView toastImage = new ImageView(getApplicationContext());
             toastImage.setImageResource(R.drawable.duigou);
             toastView.addView(toastImage);
             toast.show();
-            //创建intent,并附加消息
-            Intent intent = new Intent(this, MainActivity.class);
-            //想Android系统发出链接请求，并跳转界面
-            startActivity(intent);
+            jumpToMainActivity();
         } else {
             studentDao.insertStudent(student);
             //定制化toast
             Toast toast = Toast.makeText(this, "添加成功 ", Toast.LENGTH_SHORT);
-            LinearLayout toastView= (LinearLayout) toast.getView();
+            LinearLayout toastView = (LinearLayout) toast.getView();
             toastView.setOrientation(LinearLayout.HORIZONTAL);
             ImageView toastImage = new ImageView(getApplicationContext());
             toastImage.setImageResource(R.drawable.duigou);
             toastView.addView(toastImage);
             toast.show();
-            //创建intent,并附加消息
-            Intent intent = new Intent(this, MainActivity.class);
-            //想Android系统发出链接请求，并跳转界面
-            startActivity(intent);
+            jumpToMainActivity();
         }
     }
 
@@ -208,5 +220,12 @@ public class StudentActivity extends AppCompatActivity {
     public void showDatePicker(View view) {
         DialogFragment newFragment = new DatePickerFragment();
         newFragment.show(getSupportFragmentManager(), "datePicker");
+    }
+
+    public void jumpToMainActivity() {
+        //创建intent,并附加消息
+        Intent intent = new Intent(this, MainActivity.class);
+        //想Android系统发出链接请求，并跳转界面
+        startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(this).toBundle());
     }
 }

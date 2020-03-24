@@ -47,10 +47,7 @@ public class LoginActivity extends AppCompatActivity {
                     Toast toast = Toast.makeText(inheritableThreadLocal.get(), "登入成功", Toast.LENGTH_SHORT);
                     toast.show();
                     //跳转到学生列表
-                    //创建intent,并附加消息
-                    Intent intent = new Intent(inheritableThreadLocal.get(), MainActivity.class);
-                    //想Android系统发出链接请求，并跳转界面
-                    startActivity(intent);
+                    jumpToAds();
                 } else {
                     //验证失败
                     Toast toast = Toast.makeText(inheritableThreadLocal.get(), "登入失败", Toast.LENGTH_SHORT);
@@ -71,10 +68,11 @@ public class LoginActivity extends AppCompatActivity {
 
     }
 
-    public void jumpToAds(View view) {
+    public void jumpToAds() {
         //创建intent,并附加消息
         Intent intent = new Intent(this, AdsActivity.class);
         //想Android系统发出链接请求，并跳转界面
         startActivity(intent);
+        finish();
     }
 }

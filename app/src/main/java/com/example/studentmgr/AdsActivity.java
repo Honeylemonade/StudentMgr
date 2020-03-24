@@ -15,7 +15,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 public class AdsActivity extends AppCompatActivity {
-    public static int remainTime = 4;
+    public static int remainTime = 0;
     public static Handler handler = new Handler();
     TextView textView;
     public static Context context;
@@ -48,6 +48,7 @@ public class AdsActivity extends AppCompatActivity {
                     Intent intent = new Intent(AdsActivity.context, MainActivity.class);
                     //想Android系统发出链接请求，并跳转界面
                     startActivity(intent);
+                    finish();
                 }
                 if (remainTime > 0) {
                     handler.postDelayed(this, 1000);

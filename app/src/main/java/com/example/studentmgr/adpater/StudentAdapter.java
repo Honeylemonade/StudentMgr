@@ -1,21 +1,22 @@
 package com.example.studentmgr.adpater;
 
 import android.content.Context;
+import android.view.GestureDetector;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.Filter;
-import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.studentmgr.MainActivity;
 import com.example.studentmgr.R;
 import com.example.studentmgr.entity.Student;
 
 import java.util.ArrayList;
 
-public class StudentAdapter extends BaseAdapter{
+public class StudentAdapter extends BaseAdapter {
     private Context context;
     private ArrayList<Student> arrayList;
     private LayoutInflater layoutInflater;
@@ -87,7 +88,7 @@ public class StudentAdapter extends BaseAdapter{
         viewHolder.textView5.setText(sex);
         viewHolder.textView8.setText(student.getCollege());
         viewHolder.textView16.setText("NO." + String.valueOf(position + 1));
-
         return convertView;
     }
+
 }

@@ -3,23 +3,28 @@ package com.example.studentmgr;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import android.app.ActivityOptions;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.transition.Fade;
+import android.transition.Slide;
 import android.view.ContextMenu;
+import android.view.GestureDetector;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.SearchView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -33,6 +38,8 @@ import com.example.studentmgr.listener.CollegeSpinnerListener;
 import java.util.ArrayList;
 import java.util.Collections;
 
+import static android.content.Intent.FLAG_ACTIVITY_REORDER_TO_FRONT;
+
 public class MainActivity extends AppCompatActivity {
     private ListView listView;
     public static Context instance;
@@ -45,6 +52,10 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //第一次进入时使用
+        getWindow().setEnterTransition(new Slide(Gravity.LEFT));
+        //再次进入时使用
+        getWindow().setReenterTransition(new Slide(Gravity.LEFT));
         setContentView(R.layout.activity_main);
         instance = this;
         //初始化数据
@@ -53,6 +64,7 @@ public class MainActivity extends AppCompatActivity {
         Toolbar myToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(myToolbar);
     }
+
 
     /**
      * 初始化显示学生数据
@@ -67,6 +79,7 @@ public class MainActivity extends AppCompatActivity {
         listView.setAdapter(new StudentAdapter(this, studentArrayList));
 
     }
+
 
     //工具栏菜单
     @Override
@@ -86,10 +99,7 @@ public class MainActivity extends AppCompatActivity {
                 return true;
 
             case R.id.action_insert:
-                //创建intent,并附加消息
-                Intent intent = new Intent(this, StudentActivity.class);
-                //想Android系统发出链接请求，并跳转界面
-                startActivity(intent);
+                jumpToStudentActivity();
                 return true;
 
             case R.id.action_flash:
@@ -125,7 +135,7 @@ public class MainActivity extends AppCompatActivity {
                 StudentDao studentDao = new StudentDaoImpl(MainActivity.instance);
                 ArrayList<Student> studentArrayList = studentDao.selectStudentByMultyConditions(name, college, profession);
                 listView.setAdapter(new StudentAdapter(MainActivity.instance, studentArrayList));
-                if (studentArrayList.size()==0){
+                if (studentArrayList.size() == 0) {
                     Toast.makeText(MainActivity.instance, "结果为空", Toast.LENGTH_SHORT).show();
                 }
 
@@ -153,6 +163,12 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * 长按操作content
+     *
+     * @param item
+     * @return
+     */
     @Override
     public boolean onContextItemSelected(MenuItem item) {
         //关键代码
@@ -174,17 +190,23 @@ public class MainActivity extends AppCompatActivity {
         return super.onContextItemSelected(item);
     }
 
-
+    /**
+     * 长按操作1：编辑学生信息
+     *
+     * @param id
+     */
     public void updateItem(String id) {
         Toast.makeText(this, "学号：" + id, Toast.LENGTH_SHORT).show();
-        //创建intent,并附加消息
-        Intent intent = new Intent(this, StudentActivity.class);
-        intent.putExtra("id", id);
-        //想Android系统发出链接请求，并跳转界面
-        startActivity(intent);
+        jumpToStudentActivityForUpdate(id);
 
     }
 
+    /**
+     * 长按操作2：删除学生信息
+     *
+     * @param id
+     * @param context
+     */
     public void deleteItem(final String id, final Context context) {
         final AlertDialog.Builder normalDialog = new AlertDialog.Builder(MainActivity.this);
         normalDialog.setMessage("确定要删除么?");
@@ -202,9 +224,8 @@ public class MainActivity extends AppCompatActivity {
                 toastImage.setImageResource(R.drawable.duigou);
                 toastView.addView(toastImage);
                 toast.show();
-                Intent intent2 = new Intent(context, MainActivity.class);
-                //想Android系统发出链接请求，并跳转界面
-                startActivity(intent2);
+                ArrayList<Student> studentArrayList = studentDao.selectAll();
+                listView.setAdapter(new StudentAdapter(MainActivity.instance, studentArrayList));
             }
         });
         normalDialog.setNegativeButton("取消", new DialogInterface.OnClickListener() {
@@ -217,5 +238,29 @@ public class MainActivity extends AppCompatActivity {
         normalDialog.show();
     }
 
+    /**
+     * 跳转页面到StudentActivity
+     */
+    public void jumpToStudentActivity() {
+        //创建intent,并附加消息
+        Intent intent = new Intent(this, StudentActivity.class);
+        //想Android系统发出链接请求，并跳转界面
+        intent.setFlags(FLAG_ACTIVITY_REORDER_TO_FRONT);
 
+        startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(this).toBundle());
+    }
+
+    /**
+     * 编辑学生信息的页面跳转
+     *
+     * @param id
+     */
+    public void jumpToStudentActivityForUpdate(String id) {
+        //创建intent,并附加消息
+        Intent intent = new Intent(this, StudentActivity.class);
+        intent.putExtra("id", id);
+        intent.setFlags(FLAG_ACTIVITY_REORDER_TO_FRONT);
+        //想Android系统发出链接请求，并跳转界面
+        startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(this).toBundle());
+    }
 }
