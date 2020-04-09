@@ -109,10 +109,13 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(this, "刷新成功", Toast.LENGTH_SHORT).show();
                 return true;
 
+            case R.id.action_findPhonePlace:
+                jumpToPhonePlaceActivity();
             default:
                 return super.onOptionsItemSelected(item);
         }
     }
+
 
     //显示搜索窗口
     private void showSearchDialog() {
@@ -263,4 +266,14 @@ public class MainActivity extends AppCompatActivity {
         //想Android系统发出链接请求，并跳转界面
         startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(this).toBundle());
     }
+
+    /**
+     * 跳转到手机归属地查询界面
+     */
+    private void jumpToPhonePlaceActivity() {
+        Intent intent = new Intent(this, PhonePlaceActivity.class);
+        //想Android系统发出链接请求，并跳转界面
+        startActivity(intent);
+    }
+
 }

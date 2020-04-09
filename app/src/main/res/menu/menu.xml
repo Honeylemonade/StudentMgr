@@ -14,4 +14,7 @@
     <item
         android:id="@+id/action_insert"
         android:title="@string/action_insert" />
+    <item
+        android:id="@+id/action_findPhonePlace"
+        android:title="@string/action_findPhonePlace" />
 </menu>
