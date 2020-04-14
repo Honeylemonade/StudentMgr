@@ -8,7 +8,10 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.transition.Fade;
 import android.transition.Slide;
 import android.view.ContextMenu;
@@ -41,8 +44,8 @@ import java.util.Collections;
 import static android.content.Intent.FLAG_ACTIVITY_REORDER_TO_FRONT;
 
 public class MainActivity extends AppCompatActivity {
-    private ListView listView;
-    public static Context instance;
+    public ListView listView;
+    public static MainActivity instance;
     //查询dialog中的控件
     EditText editText5;
     Spinner spinner3;
@@ -63,6 +66,14 @@ public class MainActivity extends AppCompatActivity {
         //初始化应用栏
         Toolbar myToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(myToolbar);
+        //读取屏幕状态
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        boolean s = sharedPreferences.getBoolean("switch_preference_1", false);
+        if (s) {
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+        }else {
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        }
     }
 
 
@@ -111,6 +122,11 @@ public class MainActivity extends AppCompatActivity {
 
             case R.id.action_findPhonePlace:
                 jumpToPhonePlaceActivity();
+                return true;
+
+            case R.id.action_config:
+                jumpToconfigActivity();
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -201,7 +217,6 @@ public class MainActivity extends AppCompatActivity {
     public void updateItem(String id) {
         Toast.makeText(this, "学号：" + id, Toast.LENGTH_SHORT).show();
         jumpToStudentActivityForUpdate(id);
-
     }
 
     /**
@@ -272,6 +287,15 @@ public class MainActivity extends AppCompatActivity {
      */
     private void jumpToPhonePlaceActivity() {
         Intent intent = new Intent(this, PhonePlaceActivity.class);
+        //想Android系统发出链接请求，并跳转界面
+        startActivity(intent);
+    }
+
+    /**
+     * 跳转到设置界面
+     */
+    private void jumpToconfigActivity() {
+        Intent intent = new Intent(this, ConfigActivity.class);
         //想Android系统发出链接请求，并跳转界面
         startActivity(intent);
     }

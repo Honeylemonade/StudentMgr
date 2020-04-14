@@ -5,8 +5,12 @@ import androidx.fragment.app.DialogFragment;
 
 import android.app.ActivityOptions;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
+import android.preference.PreferenceManager;
 import android.transition.Fade;
 import android.transition.Slide;
 import android.view.GestureDetector;
@@ -21,6 +25,7 @@ import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.studentmgr.dao.StudentDao;
@@ -31,12 +36,15 @@ import com.example.studentmgr.listener.StudentGestureListener;
 import com.example.studentmgr.util.DatePickerFragment;
 import com.example.studentmgr.util.SpinnerSelecter;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.util.ArrayList;
 
 public class StudentActivity extends AppCompatActivity {
     EditText editText;
     EditText editText2;
     EditText editText6;
+    EditText editText10;
     RadioGroup radioGroup;
     RadioButton radioButton;
     RadioButton radioButton2;
@@ -72,6 +80,60 @@ public class StudentActivity extends AppCompatActivity {
         }
         //手势监听器
         gestureDetector = new GestureDetector(this, new StudentGestureListener());
+        //读取屏幕状态
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        boolean s = sharedPreferences.getBoolean("switch_preference_1", false);
+        if (s) {
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+        } else {
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        }
+        //读取字体大小
+        String size = sharedPreferences.getString("list_preference_1", "中");
+        TextView textView9 = findViewById(R.id.textView9);
+        TextView textView10 = findViewById(R.id.textView10);
+        TextView textView11 = findViewById(R.id.textView11);
+        TextView textView12 = findViewById(R.id.textView12);
+        TextView textView13 = findViewById(R.id.textView13);
+        TextView textView15 = findViewById(R.id.textView15);
+        TextView textView20 = findViewById(R.id.textView20);
+
+        if (size.equals("中")) {
+            textView9.setTextSize(14);
+            textView10.setTextSize(14);
+            textView11.setTextSize(14);
+            textView12.setTextSize(14);
+            textView13.setTextSize(14);
+            textView15.setTextSize(14);
+            textView20.setTextSize(14);
+            editText.setTextSize(18);
+            editText2.setTextSize(18);
+            editText6.setTextSize(18);
+
+        } else if (size.equals("小")) {
+            textView9.setTextSize(10);
+            textView10.setTextSize(10);
+            textView11.setTextSize(10);
+            textView12.setTextSize(10);
+            textView13.setTextSize(10);
+            textView15.setTextSize(10);
+            textView20.setTextSize(10);
+            editText.setTextSize(14);
+            editText2.setTextSize(14);
+            editText6.setTextSize(14);
+        } else if (size.equals("大")) {
+            textView9.setTextSize(18);
+            textView10.setTextSize(18);
+            textView11.setTextSize(18);
+            textView12.setTextSize(18);
+            textView13.setTextSize(18);
+            textView15.setTextSize(18);
+            textView20.setTextSize(18);
+            editText.setTextSize(20);
+            editText2.setTextSize(20);
+            editText6.setTextSize(20);
+        }
+
     }
 
     @Override
@@ -140,6 +202,28 @@ public class StudentActivity extends AppCompatActivity {
         instance = this;
 
     }
+
+    /**
+     * 导入文件
+     * @param view
+     */
+    public void inputFile(View view) {
+        String result;
+        try {
+            File f=new File(Environment.getExternalStorageDirectory().getPath()+"/NewTextFile.txt");
+            int length=(int)f.length();
+            byte[] buff=new byte[length];
+            FileInputStream fin=new FileInputStream(f);
+            fin.read(buff);
+            fin.close();
+            result=new String(buff,"UTF-8");
+            EditText editText10= findViewById(R.id.editText10);
+            editText10.setText(result);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
 
     /**
      * 用户点击提交按钮，检验学生信息，插入数据库，并跳转至主页面跳转至主页面

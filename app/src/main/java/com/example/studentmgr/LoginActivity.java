@@ -2,6 +2,7 @@ package com.example.studentmgr;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
@@ -16,19 +17,24 @@ import com.example.studentmgr.util.AdminChecker;
 
 public class LoginActivity extends AppCompatActivity {
     private ProgressBar progressBar;
+    SharedPreferences.Editor editor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        editor = getSharedPreferences("com.example.studentmgr_preferences", MODE_PRIVATE).edit();
+
+
     }
 
     public void loginBTNOnClick(View view) throws InterruptedException {
         //获取填写信息
         EditText editText = findViewById(R.id.editText3);
-        String userName = editText.getText().toString();
+        final String userName = editText.getText().toString();
         EditText editText2 = findViewById(R.id.editText4);
-        String password = editText2.getText().toString();
+        final String password = editText2.getText().toString();
         final Admin admin = new Admin(userName, password);
         //显示进度条
         ProgressBar progressBar = findViewById(R.id.progressBar);
@@ -46,6 +52,10 @@ public class LoginActivity extends AppCompatActivity {
                 if (AdminChecker.check(inheritableThreadLocal.get(), inheritableThreadLocal2.get())) {
                     Toast toast = Toast.makeText(inheritableThreadLocal.get(), "登入成功", Toast.LENGTH_SHORT);
                     toast.show();
+                    //添加到本地文件
+                    editor.putString("userNameEditTextPreference", userName);
+                    editor.putString("passwordEditTextPreference", password);
+                    editor.commit();
                     //跳转到学生列表
                     jumpToAds();
                 } else {

@@ -11,9 +11,15 @@
     <string name="action_insert">添加</string>
     <string name="action_find">查找</string>
     <string name="action_findPhonePlace">查询手机归属地</string>
+    <string name="action_config">设置</string>
     <string-array name="collegeArray">
         <item>计算机学院</item>
         <item>汽车学院</item>
         <item>电气学院</item>
+    </string-array>
+    <string-array name="fontSize">
+        <item>小</item>
+        <item>中</item>
+        <item>大</item>
     </string-array>
 </resources>

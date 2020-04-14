@@ -2,7 +2,10 @@ package com.example.studentmgr;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.SharedPreferences;
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -22,11 +25,21 @@ public class PhonePlaceActivity extends AppCompatActivity {
 
     EditText editText7;
     TextView textView26;
+    public static PhonePlaceActivity instance;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_phone_place);
+        instance=this;
+        //读取屏幕状态
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        boolean s = sharedPreferences.getBoolean("switch_preference_1", false);
+        if (s) {
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+        }else {
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        }
     }
 
     public void onFindClick(View view) {

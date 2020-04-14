@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <!--  账号与安全-->
+    <PreferenceCategory
+        android:key="safe_category"
+        android:title="账号与安全">
+        <EditTextPreference
+            android:key="userNameEditTextPreference"
+            android:summary="请注意个人信息安全"
+            android:title="用户名" />
+        <EditTextPreference
+            android:key="passwordEditTextPreference"
+            android:summary="请注意保护好您的密码"
+            android:title="密码" />
+    </PreferenceCategory>
+
+
+    <!--  通用-->
+    <PreferenceCategory
+        android:key="common_category"
+        android:title="通用">
+        <SwitchPreference
+            android:defaultValue="false"
+            android:key="switch_preference_1"
+            android:summary="如果选中，将开启横屏模式，反之，则启用竖屏模式"
+            android:title="开启横屏模式" />
+        <ListPreference
+            android:defaultValue="false"
+            android:entries="@array/fontSize"
+            android:entryValues="@array/fontSize"
+            android:key="list_preference_1"
+            android:summary="设置字体的大、中、小 三个模式"
+            android:title="字体大小" />
+    </PreferenceCategory>
+
+
+    <!--  关于-->
+    <PreferenceCategory
+        android:key="about_category"
+        android:title="关于">
+        <EditTextPreference
+            android:defaultValue="Default value"
+            android:key="edit_text_preference_1"
+            android:selectAllOnFocus="true"
+            android:singleLine="true"
+            android:summary="这里收录了程序的一些基本信息，如果想了解更多，请查看官当文档" />
+    </PreferenceCategory>
+
+
+</PreferenceScreen>
