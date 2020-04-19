@@ -97,6 +97,7 @@ public class StudentActivity extends AppCompatActivity {
         TextView textView13 = findViewById(R.id.textView13);
         TextView textView15 = findViewById(R.id.textView15);
         TextView textView20 = findViewById(R.id.textView20);
+        TextView textView27 = findViewById(R.id.textView27);
 
         if (size.equals("中")) {
             textView9.setTextSize(14);
@@ -106,6 +107,7 @@ public class StudentActivity extends AppCompatActivity {
             textView13.setTextSize(14);
             textView15.setTextSize(14);
             textView20.setTextSize(14);
+            textView27.setTextSize(14);
             editText.setTextSize(18);
             editText2.setTextSize(18);
             editText6.setTextSize(18);
@@ -118,6 +120,7 @@ public class StudentActivity extends AppCompatActivity {
             textView13.setTextSize(10);
             textView15.setTextSize(10);
             textView20.setTextSize(10);
+            textView27.setTextSize(10);
             editText.setTextSize(14);
             editText2.setTextSize(14);
             editText6.setTextSize(14);
@@ -129,6 +132,7 @@ public class StudentActivity extends AppCompatActivity {
             textView13.setTextSize(18);
             textView15.setTextSize(18);
             textView20.setTextSize(18);
+            textView27.setTextSize(18);
             editText.setTextSize(20);
             editText2.setTextSize(20);
             editText6.setTextSize(20);
@@ -205,21 +209,26 @@ public class StudentActivity extends AppCompatActivity {
 
     /**
      * 导入文件
+     *
      * @param view
      */
     public void inputFile(View view) {
         String result;
         try {
-            File f=new File(Environment.getExternalStorageDirectory().getPath()+"/NewTextFile.txt");
-            int length=(int)f.length();
-            byte[] buff=new byte[length];
-            FileInputStream fin=new FileInputStream(f);
+            File f = new File(Environment.getExternalStorageDirectory().getPath() + "/NewTextFile.txt");
+            int length = (int) f.length();
+            byte[] buff = new byte[length];
+            FileInputStream fin = new FileInputStream(f);
             fin.read(buff);
             fin.close();
-            result=new String(buff,"UTF-8");
-            EditText editText10= findViewById(R.id.editText10);
+            result = new String(buff, "UTF-8");
+            EditText editText10 = findViewById(R.id.editText10);
+            //字符串截断
+            if (result.length() > 200) {
+                result = result.substring(0, 199);
+            }
             editText10.setText(result);
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }

@@ -236,22 +236,24 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:gravity="right"
                 android:text="简介" />
 
             <EditText
                 android:id="@+id/editText10"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
+                android:layout_weight="0.2"
                 android:ems="10"
                 android:hint="请输入您的简介"
-                android:inputType="textPersonName" />
+                android:inputType="textPersonName"
+                android:maxLength="200" />
 
             <Button
                 android:id="@+id/button4"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
+                android:layout_weight="0.1"
                 android:onClick="inputFile"
                 android:text="导入" />
 
